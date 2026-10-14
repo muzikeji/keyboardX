@@ -543,7 +543,7 @@ CHOptimizedMethod0(self, BOOL, UITextField, resignFirstResponder) {
     [self restoreCapturedFirstResponder];
 
     if (!hasPendingPaste && self.isSpringBoardRuntime) {
-        HBLogDebug(@"Kayoko: helper paste skipped because SpringBoard has no pending paste target");
+        HBLogDebug(@"%@", @"Kayoko: helper paste skipped because SpringBoard has no pending paste target");
         return;
     }
 
@@ -555,7 +555,7 @@ CHOptimizedMethod0(self, BOOL, UITextField, resignFirstResponder) {
         HBLogDebug(@"Kayoko: helper paste completed before pending check token=%lu", (unsigned long)pendingPasteToken);
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
-          HBLogDebug(@"Kayoko: helper paste scheduled immediate perform");
+          HBLogDebug(@"%@", @"Kayoko: helper paste scheduled immediate perform");
           [self performPaste];
         });
     }
@@ -1115,7 +1115,7 @@ CHOptimizedMethod0(self, BOOL, UITextField, resignFirstResponder) {
 
 - (BOOL)pasteIntoKayokoInputResponder:(UIResponder *)responder {
     if (!responder) {
-        HBLogDebug(@"Kayoko: paste into Kayoko responder skipped because responder is nil");
+        HBLogDebug(@"%@", @"Kayoko: paste into Kayoko responder skipped because responder is nil");
         return NO;
     }
 
@@ -1153,7 +1153,7 @@ CHOptimizedMethod0(self, BOOL, UITextField, resignFirstResponder) {
     }
 
     if ([self currentInputIsKayokoOwned]) {
-        HBLogDebug(@"Kayoko: perform paste skipped because current input is Kayoko-owned");
+        HBLogDebug(@"%@", @"Kayoko: perform paste skipped because current input is Kayoko-owned");
         return NO;
     }
 
@@ -1415,15 +1415,15 @@ CHOptimizedMethod0(self, BOOL, UITextField, resignFirstResponder) {
       Class keyboardImplClass = NSClassFromString(@"UIKeyboardImpl");
       if (class_getInstanceMethod(keyboardImplClass, @selector(setDelegate:force:fromBecomeFirstResponder:))) {
           CHHook3(UIKeyboardImpl, setDelegate, force, fromBecomeFirstResponder);
-          HBLogDebug(@"Kayoko: installed UIKeyboardImpl setDelegate:force:fromBecomeFirstResponder: hook");
+          HBLogDebug(@"%@", @"Kayoko: installed UIKeyboardImpl setDelegate:force:fromBecomeFirstResponder: hook");
       } else if (class_getInstanceMethod(keyboardImplClass, @selector(setDelegate:force:))) {
           CHHook2(UIKeyboardImpl, setDelegate, force);
-          HBLogDebug(@"Kayoko: installed UIKeyboardImpl setDelegate:force: hook");
+          HBLogDebug(@"%@", @"Kayoko: installed UIKeyboardImpl setDelegate:force: hook");
       } else if (class_getInstanceMethod(keyboardImplClass, @selector(setDelegate:))) {
           CHHook1(UIKeyboardImpl, setDelegate);
-          HBLogDebug(@"Kayoko: installed UIKeyboardImpl setDelegate: hook");
+          HBLogDebug(@"%@", @"Kayoko: installed UIKeyboardImpl setDelegate: hook");
       } else {
-          HBLogDebug(@"Kayoko: unable to install UIKeyboardImpl setDelegate hook");
+          HBLogDebug(@"%@", @"Kayoko: unable to install UIKeyboardImpl setDelegate hook");
       }
     });
 }

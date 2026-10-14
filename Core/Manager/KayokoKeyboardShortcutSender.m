@@ -53,7 +53,7 @@ static useconds_t const kKayokoKeyboardShortcutKeyPressDelay = 50000;
 
 - (void)sendCommandV {
     dispatch_async(_eventQueue, ^{
-      HBLogDebug(@"Kayoko: dispatching simulated Cmd+V HID shortcut");
+      HBLogDebug(@"%@", @"Kayoko: dispatching simulated Cmd+V HID shortcut");
       [self dispatchKeyboardUsage:kKayokoHIDUsageKeyboardLeftGUI isKeyDown:YES];
       [self dispatchKeyboardUsage:kKayokoHIDUsageKeyboardV isKeyDown:YES];
       usleep(kKayokoKeyboardShortcutKeyPressDelay);
@@ -64,7 +64,7 @@ static useconds_t const kKayokoKeyboardShortcutKeyPressDelay = 50000;
 
 - (void)dispatchKeyboardUsage:(uint32_t)usage isKeyDown:(BOOL)isKeyDown {
     if (!_eventSystemClient) {
-        HBLogDebug(@"Kayoko: simulated shortcut skipped because IOHID event system client is unavailable");
+        HBLogDebug(@"%@", @"Kayoko: simulated shortcut skipped because IOHID event system client is unavailable");
         return;
     }
 

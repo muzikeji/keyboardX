@@ -983,7 +983,7 @@ forPasteboardItem:(KayokoPasteboardItem *)item
                    shouldAutoPaste:(BOOL)shouldAutoPaste
                 automaticPasteMode:(KayokoAutomaticPasteMode)automaticPasteMode {
     if (_isWritingPasteboardItem) {
-        HBLogDebug(@"Kayoko: pasteboard item write ignored because another write is in progress");
+        HBLogDebug(@"%@", @"Kayoko: pasteboard item write ignored because another write is in progress");
         return;
     }
 
@@ -1117,7 +1117,7 @@ forPasteboardItem:(KayokoPasteboardItem *)item
     KayokoKeyboardHostContext *hostContext =
         [[KayokoKeyboardHostResolver sharedResolver] effectiveExternalKeyboardHostContext];
     if (!hostContext) {
-        HBLogDebug(@"Kayoko: automatic paste auto mode has no external keyboard host context; using simulated");
+        HBLogDebug(@"%@", @"Kayoko: automatic paste auto mode has no external keyboard host context; using simulated");
         return NO;
     }
 

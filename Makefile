@@ -21,7 +21,8 @@ export THEOS_PACKAGE_SCHEME ?= rootless
 # 工具链说明：Alpine clang 19 + iPhoneOS16.5.sdk 下，theos 的 HBLog.h 会把
 # HBLogDebug(@"字面量") 展开成 [NSString stringWithFormat:@"字面量"]，触发 -Wformat-security。
 # theos 默认无条件追加 -Werror 且排在实例 flags 之后，会盖掉实例里的 -Wno-error。
-# 因此这里关掉 theos 的 -Werror，改由各实例自行开启 -Werror 并单独降级该警告。
+# 处理方式：(1) 已按编译器建议把 14 处 HBLogDebug(@"字面量") 改为 HBLogDebug(@"%@", @"字面量")；
+#          (2) 这里关掉 theos 的 -Werror，避免不同工具链下的告警差异直接中断构建。
 export GO_EASY_ON_ME = 1
 
 INSTALL_TARGET_PROCESSES := backboardd druid pasted

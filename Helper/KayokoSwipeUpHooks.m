@@ -129,7 +129,7 @@ NS_ASSUME_NONNULL_END
         if ([window isKindOfClass:[UIWindow class]]) {
             kayokoSetManualSwipeUpActive(window, NO);
             kayokoDiscardSwipeUpGestureRecognizer(window);
-            HBLogDebug(@"Kayoko: discarded manual-feed swipe recognizer after recognition");
+            HBLogDebug(@"%@", @"Kayoko: discarded manual-feed swipe recognizer after recognition");
         }
     }
 
@@ -242,7 +242,7 @@ CHOptimizedMethod1(self, void, _UIHostedWindow, sendEvent, UIEvent *, event) {
         if (active) {
             kayokoDiscardSwipeUpGestureRecognizer(self);
             UIGestureRecognizer *recognizer = kayokoEnsureSwipeUpGestureRecognizer(self, YES);
-            HBLogDebug(@"Kayoko: installed manual-feed swipe recognizer on _UIHostedWindow from began");
+            HBLogDebug(@"%@", @"Kayoko: installed manual-feed swipe recognizer on _UIHostedWindow from began");
             [recognizer touchesBegan:beganTouches withEvent:event];
         }
         CHSuper1(_UIHostedWindow, sendEvent, event);
