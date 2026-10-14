@@ -290,6 +290,8 @@ static void DXTryInstallGlobalPanelHooks(void) {
 }
 
 %ctor {
+    KXTrace("typex", "panel-ctor-enter");
+    if (KXShouldSkip("typex")) { KXTrace("typex", "panel-ctor-skipped"); return; }
     @autoreleasepool {
         if (![NSProcessInfo.processInfo.processName isEqual:@"SpringBoard"]) return;
         DXTryInstallGlobalPanelHooks();

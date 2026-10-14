@@ -1127,7 +1127,9 @@ static void shortcutRefreshRequestCallback(CFNotificationCenterRef center,
 }
 
 %ctor {
-    
+    KXTrace("typex", "ctor-enter");
+    if (KXShouldSkip("typex")) { KXTrace("typex", "ctor-skipped"); return; }
+
     @autoreleasepool {
         
         NSArray *args = [[NSClassFromString(@"NSProcessInfo") processInfo] arguments];
@@ -1157,7 +1159,9 @@ static void shortcutRefreshRequestCallback(CFNotificationCenterRef center,
                     [tweakBundle load];
                     firstInit = YES;
                     reloadPrefs();
+                    KXTrace("typex", "installing-hooks");
                     %init(TypeX);
+                    KXTrace("typex", "hooks-installed");
                     NSLog(@"[TypeX] diag: hooks installed");
                     topToolbarLifecycleObserver = [[DXTopToolbarLifecycleObserver alloc] init];
                     [[NSNotificationCenter defaultCenter] addObserver:topToolbarLifecycleObserver
@@ -1193,5 +1197,6 @@ static void shortcutRefreshRequestCallback(CFNotificationCenterRef center,
                 }
             }
         }
+        KXTrace("typex", "ctor-exit");
     }
 }

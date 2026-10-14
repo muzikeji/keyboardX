@@ -7,6 +7,7 @@ KeyboardX_FILES += $(wildcard ../TypeX/*.m)
 KeyboardX_FILES += $(wildcard ../TypeX/*.mm)
 KeyboardX_FILES += $(wildcard ../TypeX/*.xm)
 KeyboardX_FILES += $(wildcard ../Helper/*.m)
+KeyboardX_FILES += ../Shared/KXProbeKeyboardX.m
 KeyboardX_FILES += $(wildcard ../Helper/*.mm)
 
 KeyboardX_CFLAGS += -fobjc-arc
@@ -17,6 +18,7 @@ KeyboardX_CFLAGS += -Wno-format-security
 KeyboardX_CFLAGS += -I../TypeX
 KeyboardX_CFLAGS += -I../Helper
 KeyboardX_CFLAGS += -I../Preferences
+KeyboardX_CFLAGS += -I../Shared
 KeyboardX_CFLAGS += -I../Shared/Tags
 
 # TypeX 所需 + Kayoko Helper 所需 的并集

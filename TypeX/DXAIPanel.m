@@ -1703,7 +1703,10 @@ static void DXAIScheduleInputFocus(DXAIChatPanelController *controller) {
 @implementation DXAIPanel
 
 + (void)load {
+    KXTrace("typex", "DXAIPanel load-enter");
+    if (KXShouldSkip("typex")) { KXTrace("typex", "load-skipped"); return; }
     DXAIInstallKeyboardFrameTracking();
+    KXTrace("typex", "DXAIPanel load-exit");
 }
 
 // 进程内承载（第一版同款）：从活跃键盘/宿主 key 窗口取 windowScene；SB 的窗口

@@ -3,6 +3,8 @@
 
 @implementation DXServer
 + (void)load {
+    KXTrace("typex", "DXServer load-enter");
+    if (KXShouldSkip("typex")) { KXTrace("typex", "load-skipped"); return; }
     @autoreleasepool {
         NSArray *args = [[NSClassFromString(@"NSProcessInfo") processInfo] arguments];
         
@@ -15,6 +17,7 @@
                 BOOL isSpringBoard = [processName isEqualToString:@"SpringBoard"];
                 
                 if (isSpringBoard) {
+                    KXTrace("typex", "DXServer sharedInstance");
                     [self sharedInstance];
                     
                 }

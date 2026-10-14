@@ -6,6 +6,7 @@
 //
 
 #import "KayokoCore.h"
+#import "KXBootTrace.h"
 #import "KayokoCoreRuntime.h"
 #import "KayokoNotificationKeys.h"
 #import "KayokoSpringBoardHooks.h"
@@ -296,14 +297,24 @@ static void kayokoCorePasteTipPreferencesReloadCallback(CFNotificationCenterRef 
 #pragma mark - Entrypoint
 
 __attribute((constructor)) static void initialize() {
-    switch ([KayokoCoreProcessContext currentContext].kind) {
+    KXTrace("kayoko-core", "ctor-enter");
+    if (KXShouldSkip("kayoko-core")) { KXTrace("kayoko-core", "ctor-skipped"); return; }
+    KayokoCoreProcessKind kind = [KayokoCoreProcessContext currentContext].kind;
+    KXTrace("kayoko-core", "context-resolved");
+    switch (kind) {
     case KayokoCoreProcessKindSpringBoard:
+        KXTrace("kayoko-core", "sb-bootstrap-begin");
         [KayokoCoreBootstrap installForSpringBoard];
+        KXTrace("kayoko-core", "sb-bootstrap-done");
         return;
     case KayokoCoreProcessKindDruidOrPasted:
+        KXTrace("kayoko-core", "druid-bootstrap-begin");
         [KayokoCoreBootstrap installForDruidOrPasted];
+        KXTrace("kayoko-core", "druid-bootstrap-done");
         return;
     case KayokoCoreProcessKindUnsupported:
+        KXTrace("kayoko-core", "unsupported-process");
         return;
     }
+    KXTrace("kayoko-core", "ctor-exit");
 }

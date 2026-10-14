@@ -160,6 +160,8 @@ static void DXSMSPreferencesChanged(CFNotificationCenterRef center, void *observ
     dispatch_async(dispatch_get_main_queue(), ^{ DXSMSReload(); });
 }
 %ctor {
+    KXTrace("typex", "sms-ctor-enter");
+    if (KXShouldSkip("typex")) { KXTrace("typex", "sms-ctor-skipped"); return; }
     @autoreleasepool {
         if (![NSProcessInfo.processInfo.processName isEqualToString:@"SpringBoard"]) return;
         dispatch_async(dispatch_get_main_queue(), ^{

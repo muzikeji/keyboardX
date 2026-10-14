@@ -2,6 +2,7 @@ TWEAK_NAME := KeyboardXCore
 
 KeyboardXCore_USE_MODULES := 0
 
+KeyboardXCore_FILES += ../Shared/KXProbeKeyboardXCore.m
 KeyboardXCore_FILES += KayokoCore.m
 KeyboardXCore_FILES += KayokoCoreRuntime.m
 KeyboardXCore_FILES += KayokoKeyboardHostResolver.m
@@ -27,6 +28,7 @@ KeyboardXCore_CFLAGS += -IDataSources
 KeyboardXCore_CFLAGS += -IModels
 KeyboardXCore_CFLAGS += -IPresentation
 KeyboardXCore_CFLAGS += -IViews
+KeyboardXCore_CFLAGS += -I../Shared
 KeyboardXCore_CFLAGS += -I../Shared/Tags
 
 KeyboardXCore_FRAMEWORKS += AudioToolbox

@@ -30,6 +30,7 @@ KeyboardXPreferences_CFLAGS += -I.
 KeyboardXPreferences_CFLAGS += -IControllers
 KeyboardXPreferences_CFLAGS += -ICells
 KeyboardXPreferences_CFLAGS += -IUtilities
+KeyboardXPreferences_CFLAGS += -I../Shared
 KeyboardXPreferences_CFLAGS += -I../Shared/Tags
 KeyboardXPreferences_CFLAGS += -I../TypeX
 KeyboardXPreferences_CFLAGS += -I../TypeX/typexprefs

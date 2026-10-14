@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # ===== keyboardX: 剪贴板侧（Kayoko）=====
 UPDATER="/usr/local/libexec/keyboardx_updater"
 if command -v jbroot >/dev/null 2>&1; then
@@ -30,5 +29,15 @@ if [ ! -s "$SHARED_PLIST" ] && [ -s "$DOMAIN_PLIST" ]; then
     cp "$DOMAIN_PLIST" "$SHARED_PLIST" || true
     chmod 0644 "$SHARED_PLIST" || true
 fi
+
+# ===== keyboardX: 加载期诊断目录 =====
+# boot.log 记录每个组件在加载期走到哪一步；一旦安全模式，读它即可定位崩溃点。
+# 同目录下放置 disable-<组件> 文件可单独关闭该组件，便于二分定位：
+#   disable-all / disable-typex / disable-kayoko-helper / disable-kayoko-core
+TRACE_DIR="/var/mobile/Library/KeyboardX"
+mkdir -p "$TRACE_DIR" || true
+chmod 0777 "$TRACE_DIR" || true
+: >> "$TRACE_DIR/boot.log" 2>/dev/null || true
+chmod 0666 "$TRACE_DIR/boot.log" 2>/dev/null || true
 
 exit 0

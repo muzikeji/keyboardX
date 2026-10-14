@@ -8,12 +8,16 @@
 #define DX_ROOT_PATH_NS(path) ROOT_PATH_NS(path)
 #endif
 #import <spawn.h>
+#import "KXBootTrace.h"
 
 @class CPDistributedMessagingCenter;
 
 #import "DXPrefsManager.h"
 
-#define bundlePath DX_ROOT_PATH_NS(@"/Library/PreferenceBundles/TypeXPrefs.bundle")
+// 合并工程后偏好面板统一为 KeyboardXPreferences.bundle。
+// 上游此宏指向 TypeXPrefs.bundle，合并后该 bundle 不存在，
+// 会导致 tweakBundle 为 nil —— 本地化与图标资源全部失效。
+#define bundlePath DX_ROOT_PATH_NS(@"/Library/PreferenceBundles/KeyboardXPreferences.bundle")
 //#define typexBundlePath @"/Library/Application Support/TypeX.bundle"
 #define LOCALIZED(str) [tweakBundle localizedStringForKey:str value:@"" table:nil]
 

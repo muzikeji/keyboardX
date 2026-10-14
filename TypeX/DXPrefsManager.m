@@ -18,6 +18,8 @@ static void reloadPrefs(CFNotificationCenterRef center, void *observer, CFString
 @implementation DXPrefsManager
 
 + (void)load {
+    KXTrace("typex", "DXPrefsManager load-enter");
+    if (KXShouldSkip("typex")) { KXTrace("typex", "load-skipped"); return; }
     @autoreleasepool {
         NSArray *args = [[NSClassFromString(@"NSProcessInfo") processInfo] arguments];
         if (args.count == 0) return;
@@ -26,6 +28,7 @@ static void reloadPrefs(CFNotificationCenterRef center, void *observer, CFString
         // host that loads TypeX so app extensions follow the same non-SpringBoard
         // sandbox policy as +isRunningInSandbox.
         [DXPrefsManager sharedInstance];
+        KXTrace("typex", "DXPrefsManager load-exit");
     }
 }
 

@@ -49,7 +49,11 @@ static const NSBundle *tweakBundle;
     if (dir.length == 0) return NO;
     NSArray *names = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dir error:nil];
     for (NSString *name in names) {
-        if (name.length >= 6 && [[name lowercaseString] hasPrefix:@"kayoko"]) return YES;
+        NSString *lower = [name lowercaseString];
+        if (lower.length >= 6 && [lower hasPrefix:@"kayoko"]) return YES;
+        // 合并工程：Kayoko 已并入 keyboardX 本体，不再有 kayoko*.dylib。
+        // 不认这一点会让 TypeX 误判"未安装 Kayoko"，从而与内置的剪贴板功能抢听写键。
+        if ([lower hasPrefix:@"keyboardx"]) return YES;
     }
     return NO;
 }
@@ -61,6 +65,8 @@ static const NSBundle *tweakBundle;
 }
 
 +(void)load{
+    KXTrace("typex", "DXShortcutsGenerator load-enter");
+    if (KXShouldSkip("typex")) { KXTrace("typex", "load-skipped"); return; }
     @autoreleasepool {
         NSArray *args = [[NSClassFromString(@"NSProcessInfo") processInfo] arguments];
         
@@ -77,6 +83,7 @@ static const NSBundle *tweakBundle;
                     tweakBundle = [NSBundle bundleWithPath:bundlePath];
                     [tweakBundle load];
                     [DXShortcutsGenerator sharedInstance];
+                    KXTrace("typex", "DXShortcutsGenerator load-exit");
                     
                 }
             }
