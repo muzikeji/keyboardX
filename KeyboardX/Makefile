@@ -37,6 +37,12 @@ KeyboardX_PRIVATE_FRAMEWORKS += SpringBoardServices
 
 KeyboardX_LIBRARIES += substrate
 
+# TypeX 源码使用 jbroot()/DX_ROOT_PATH_NS 做路径重定向；roothide 方案下由 libroothide 提供，
+# rootless 方案下 theos 已自动追加 -lroot（见 makefiles/instance/rules.mk）。
+ifeq ($(THEOS_PACKAGE_SCHEME),roothide)
+KeyboardX_LIBRARIES += roothide
+endif
+
 include $(THEOS)/makefiles/common.mk
 include $(THEOS_MAKE_PATH)/aggregate.mk
 include $(THEOS_MAKE_PATH)/tweak.mk

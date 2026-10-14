@@ -4,6 +4,7 @@
 //
 
 #import "KeyboardXHeaderCell.h"
+#import <Preferences/PSSpecifier.h>
 
 @implementation KeyboardXHeaderCell
 
