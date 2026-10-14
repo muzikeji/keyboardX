@@ -1156,7 +1156,13 @@ static void shortcutRefreshRequestCallback(CFNotificationCenterRef center,
 				
                 if (isSpringBoard || isApplication){
                     tweakBundle = [NSBundle bundleWithPath:bundlePath];
-                    [tweakBundle load];
+                    // 绝不要 [tweakBundle load]！
+                    // 它会加载偏好面板的可执行文件（AltList、JS 引擎，以及与本
+                    // dylib 重名的 DXPrefsManager/DXShortcutsGenerator 等类）到当前进程。
+                    // 上游 TypeX 的 TypeXPrefs.bundle 很小，合并后是 96 个文件的
+                    // KeyboardXPreferences.bundle，在 SpringBoard 和每个 App 里加载
+                    // 会严重拖慢系统。本地化与图片资源用 bundleWithPath 即可读取，
+                    // 完全不需要 load。
                     firstInit = YES;
                     reloadPrefs();
                     KXTrace("typex", "installing-hooks");

@@ -81,7 +81,7 @@ static const NSBundle *tweakBundle;
                 
                 if (isSpringBoard || isApplication) {
                     tweakBundle = [NSBundle bundleWithPath:bundlePath];
-                    [tweakBundle load];
+                    // 同上：绝不 load 偏好面板可执行文件（详见 TypeX.xm 的说明）。
                     [DXShortcutsGenerator sharedInstance];
                     KXTrace("typex", "DXShortcutsGenerator load-exit");
                     

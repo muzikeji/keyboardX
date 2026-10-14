@@ -20,7 +20,7 @@
     [[self contentView] setBackgroundColor:[UIColor clearColor]];
     UILayoutGuide *margins = [self layoutMarginsGuide];
 
-    UIImage *icon = [UIImage imageNamed:@"KeyboardXIcon" inBundle:bundle compatibleWithTraitCollection:nil];
+    UIImage *icon = [UIImage imageNamed:@"KeyboardXHeaderIcon" inBundle:bundle compatibleWithTraitCollection:nil];
     UIImageView *iconView = [[UIImageView alloc] initWithImage:icon];
     [iconView setContentMode:UIViewContentModeScaleAspectFit];
     [iconView setClipsToBounds:YES];
