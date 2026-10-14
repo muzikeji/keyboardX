@@ -36,6 +36,8 @@ KeyboardXPreferences_CFLAGS += -I../TypeX/typexprefs
 KeyboardXPreferences_CFLAGS += -I../Helper
 KeyboardXPreferences_CFLAGS += -DTYPEX_PACKAGE_VERSION=\"$(or $(PACKAGE_VERSION),$(THEOS_PACKAGE_BASE_VERSION))\"
 
+# MobileCoreServices 提供 LSApplicationProxy / LSApplicationWorkspace，AltList 依赖
+KeyboardXPreferences_FRAMEWORKS += MobileCoreServices
 KeyboardXPreferences_FRAMEWORKS += UIKit
 KeyboardXPreferences_FRAMEWORKS += CoreGraphics
 KeyboardXPreferences_FRAMEWORKS += QuartzCore
