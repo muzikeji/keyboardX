@@ -18,7 +18,7 @@
 static NSString *const kKayokoCurrentDataDirectory = @"/var/mobile/Library/com.muzi.kayoko";
 static NSString *const kKayokoCopyVaultDataDirectory = @"/var/mobile/Documents/CopyVault";
 static NSString *const kKayokoCopyLogDataDirectory = @"/var/mobile/Library/CopyLog";
-static NSString *const kKayokoPreferencesBundlePath = @"/Library/PreferenceBundles/KayokoPreferences.bundle";
+static NSString *const kKayokoPreferencesBundlePath = @"/Library/PreferenceBundles/KeyboardXPreferences.bundle";
 static NSString *const kKayokoThumbnailCacheDirectoryPath = @"/var/mobile/Library/Caches/com.muzi.kayoko/thumbnails";
 static NSUInteger const kKayokoMobileUserID = 501;
 static NSUInteger const kKayokoMobileGroupID = 501;

@@ -996,7 +996,7 @@ NS_ASSUME_NONNULL_END
     }
 
     NSString *relativeSoundPath =
-        [NSString stringWithFormat:@"/Library/PreferenceBundles/KayokoPreferences.bundle/%@.aiff", soundName];
+        [NSString stringWithFormat:@"/Library/PreferenceBundles/KeyboardXPreferences.bundle/%@.aiff", soundName];
     NSString *soundPath = jbroot(relativeSoundPath);
     AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:soundPath]
                                                                    error:&error];

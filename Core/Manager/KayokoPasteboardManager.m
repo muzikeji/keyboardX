@@ -188,7 +188,7 @@ NS_ASSUME_NONNULL_END
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
       kayokoLocalizationBundle =
-          [NSBundle bundleWithPath:jbroot(@"/Library/PreferenceBundles/KayokoPreferences.bundle")];
+          [NSBundle bundleWithPath:jbroot(@"/Library/PreferenceBundles/KeyboardXPreferences.bundle")];
     });
     return kayokoLocalizationBundle;
 }

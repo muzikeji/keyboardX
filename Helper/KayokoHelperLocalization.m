@@ -11,7 +11,7 @@ static NSBundle *kayokoHelperLocalizationBundle(void) {
     static NSBundle *bundle = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-      bundle = [NSBundle bundleWithPath:jbroot(@"/Library/PreferenceBundles/KayokoPreferences.bundle")];
+      bundle = [NSBundle bundleWithPath:jbroot(@"/Library/PreferenceBundles/KeyboardXPreferences.bundle")];
     });
     return bundle;
 }

@@ -17,7 +17,7 @@ static NSString *KayokoHistoryMigratorLocalizedString(NSString *key) {
     static NSBundle *localizationBundle = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-      localizationBundle = [NSBundle bundleWithPath:jbroot(@"/Library/PreferenceBundles/KayokoPreferences.bundle")];
+      localizationBundle = [NSBundle bundleWithPath:jbroot(@"/Library/PreferenceBundles/KeyboardXPreferences.bundle")];
     });
     return [localizationBundle localizedStringForKey:key value:key table:@"Tweak"] ?: key;
 }
