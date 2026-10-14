@@ -1,0 +1,11 @@
+Package: com.muzi.keyboardx
+Name: KeyboardX
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: 键盘增强 + 剪贴板管理 二合一插件。集成 TypeX 的双工具栏/六向手势/滑动面板/桌面手势/自定义动作/JS 引擎/AI 面板，与 Kayoko 的剪切板历史管理/搜索/标签/悬浮粘贴。
+Depends: firmware (>= 15.0), mobilesubstrate, preferenceloader
+Conflicts: com.muzi.kayoko, com.lindo.typex, com.restiveconch.actionbar, com.udevs.dockx, com.lindo.dockx, codes.aurora.kayoko, dev.traurige.kayoko, com.82flex.kayoko, com.skypain.kayoko, com.dao.kayoko, xyz.cypwn.kayoko
+Replaces: com.muzi.kayoko, com.lindo.typex, com.restiveconch.actionbar, com.udevs.dockx, com.lindo.dockx, codes.aurora.kayoko, dev.traurige.kayoko, com.82flex.kayoko, com.skypain.kayoko, com.dao.kayoko, xyz.cypwn.kayoko
+Maintainer: Muzi
+Author: Muzi
+Section: Tweaks

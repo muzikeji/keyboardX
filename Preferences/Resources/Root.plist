@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cellClass</key>
+			<string>KeyboardXHeaderCell</string>
+			<key>headerSubtitle</key>
+			<string>KEYBOARDX_SUBTITLE</string>
+			<key>headerTitle</key>
+			<string>KeyboardX</string>
+			<key>height</key>
+			<integer>96</integer>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>剪贴板</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>KayokoRootListController</string>
+			<key>icon</key>
+			<string>KayokoIcon.png</string>
+			<key>label</key>
+			<string>剪贴板管理</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>键盘</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>DXPRootListController</string>
+			<key>icon</key>
+			<string>TypeX.png</string>
+			<key>label</key>
+			<string>键盘增强</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>KeyboardX 由 Kayoko（剪贴板管理器，GPL-3.0）与 TypeX（键盘增强，AGPL-3.0）合并而成，整体以 AGPL-3.0 发布。</string>
+			<key>label</key>
+			<string>关于</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>KeyboardXAboutListController</string>
+			<key>icon</key>
+			<string>KeyboardXIcon.png</string>
+			<key>label</key>
+			<string>关于 KeyboardX</string>
+		</dict>
+	</array>
+</dict>
+</plist>

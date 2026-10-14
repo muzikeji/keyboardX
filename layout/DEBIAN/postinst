@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# ===== keyboardX: 剪贴板侧（Kayoko）=====
+UPDATER="/usr/local/libexec/keyboardx_updater"
+if command -v jbroot >/dev/null 2>&1; then
+    UPDATER="$(jbroot "$UPDATER")"
+fi
+if [ ! -x "$UPDATER" ] && [ -x "/var/jb/usr/local/libexec/keyboardx_updater" ]; then
+    UPDATER="/var/jb/usr/local/libexec/keyboardx_updater"
+fi
+if [ -x "$UPDATER" ]; then
+    "$UPDATER" postinst || true
+fi
+
+killall -9 druid pasted >/dev/null 2>&1 || true
+
+# ===== keyboardX: 键盘侧（TypeX 沙盒宿主共享快照）=====
+if [[ x$JB_ROOT_PATH != x"" ]]; then
+    JBROOT="/var/jb"
+else
+    JBROOT=""
+fi
+SHARED_DIR="$JBROOT/Library/TypeX"
+mkdir -p "$SHARED_DIR" || true
+chmod 0777 "$SHARED_DIR"
+
+DOMAIN_PLIST="/var/mobile/Library/Preferences/com.lindo.typex.plist"
+SHARED_PLIST="$SHARED_DIR/shared.plist"
+if [ ! -s "$SHARED_PLIST" ] && [ -s "$DOMAIN_PLIST" ]; then
+    cp "$DOMAIN_PLIST" "$SHARED_PLIST" || true
+    chmod 0644 "$SHARED_PLIST" || true
+fi
+
+exit 0

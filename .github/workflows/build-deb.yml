@@ -1,0 +1,36 @@
+name: build-deb
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        scheme: [rootless, roothide]
+    name: build (${{ matrix.scheme }})
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare Theos
+        uses: Sini921/theos-action@main
+
+      - name: Install packaging tools
+        run: brew install dpkg ldid || true
+
+      - name: Build ${{ matrix.scheme }} package
+        run: |
+          make clean || true
+          THEOS_PACKAGE_SCHEME=${{ matrix.scheme }} make package FINALPACKAGE=1
+
+      - name: Upload deb
+        uses: actions/upload-artifact@v4
+        with:
+          name: keyboardX-${{ matrix.scheme }}
+          path: packages/*.deb
+          if-no-files-found: error

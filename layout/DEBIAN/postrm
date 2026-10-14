@@ -1,0 +1,15 @@
+#!/bin/bash
+
+killall -9 druid pasted >/dev/null 2>&1 || true
+
+# 升级（upgrade）时不得清空共享目录，否则沙盒宿主会失去唯一配置来源
+if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+    if [[ x$JB_ROOT_PATH != x"" ]]; then
+        JBROOT="/var/jb"
+    else
+        JBROOT=""
+    fi
+    rm -rf "$JBROOT/Library/TypeX" || true
+fi
+
+exit 0
