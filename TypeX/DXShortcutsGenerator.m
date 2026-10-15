@@ -45,17 +45,24 @@ static const NSBundle *tweakBundle;
 // 不逐名硬编码：枚举注入目录，文件名大小写不敏感地以 kayoko 开头即算已安装，
 // 一并覆盖 Kayoko.dylib / KayokoCore.dylib / KayokoHelper.dylib / KayokoX.dylib。
 +(BOOL)isKayokoInstalled{
-    NSString *dir = DX_ROOT_PATH_NS(@"/Library/MobileSubstrate/DynamicLibraries");
-    if (dir.length == 0) return NO;
-    NSArray *names = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dir error:nil];
-    for (NSString *name in names) {
-        NSString *lower = [name lowercaseString];
-        if (lower.length >= 6 && [lower hasPrefix:@"kayoko"]) return YES;
-        // 合并工程：Kayoko 已并入 keyboardX 本体，不再有 kayoko*.dylib。
-        // 不认这一点会让 TypeX 误判"未安装 Kayoko"，从而与内置的剪贴板功能抢听写键。
-        if ([lower hasPrefix:@"keyboardx"]) return YES;
-    }
-    return NO;
+    // 结果按进程缓存：本函数在工具栏构建路径上被反复调用（每次键盘弹出都会走），
+    // 而目录枚举是文件系统调用，不应出现在这条热路径上。安装状态变化时进程会
+    // 重新加载本插件，缓存自然失效。
+    static BOOL installed = NO;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+      NSString *dir = DX_ROOT_PATH_NS(@"/Library/MobileSubstrate/DynamicLibraries");
+      if (dir.length == 0) return;
+      NSArray *names = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dir error:nil];
+      for (NSString *name in names) {
+          NSString *lower = [name lowercaseString];
+          if (lower.length >= 6 && [lower hasPrefix:@"kayoko"]) { installed = YES; return; }
+          // 合并工程：Kayoko 已并入 keyboardX 本体，不再有 kayoko*.dylib。
+          // 不认这一点会让 TypeX 误判"未安装 Kayoko"，从而与内置的剪贴板功能抢听写键。
+          if ([lower hasPrefix:@"keyboardx"]) { installed = YES; return; }
+      }
+    });
+    return installed;
 }
 
 // PullOver X (com.mlgm.pulloverx) 安装探测，惯例同上：认 dylib 文件不认偏好域。

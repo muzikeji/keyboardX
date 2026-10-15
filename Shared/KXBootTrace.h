@@ -45,10 +45,42 @@ static inline void KXTraceEnsureDir(void) {
     kx_trace_dir_ready = 1;
 }
 
+// ---------------------------------------------------------------------------
+// 追踪默认【关闭】。只有 /var/mobile/Library/KeyboardX/enable-trace 存在时才生效。
+//
+// 为什么必须默认关闭：
+//   本函数在 +load / constructor 阶段被调用，而本插件的 filter 是
+//   com.apple.UIKit —— 即几乎每一个 App 以及众多系统守护进程都会加载它。
+//   无条件写日志会让【每个进程】在启动路径上产生多次 open/write/close，
+//   并向 stdout 打印（GUI 进程的 stdout 通常接到控制台/系统日志，写入是
+//   串行的）。SpringBoard 重启后所有进程集中启动时，这会在启动风暴期间
+//   形成可观测的系统级卡顿，且 boot.log 会无限增长。
+//
+// 排查加载期问题（安全模式、卡顿定位）时，用 Filza/SSH 建一个空的
+// enable-trace 文件即可完整恢复原有的逐步骤记录能力：
+//   touch /var/mobile/Library/KeyboardX/enable-trace
+// 排查完删掉即可回到零开销。
+// ---------------------------------------------------------------------------
+static inline int KXTraceEnabled(void) {
+    static int enabled = -1;
+    if (enabled < 0) {
+        KXTraceEnsureDir();
+        enabled = (access(KX_TRACE_DIR "/enable-trace", F_OK) == 0) ? 1 : 0;
+    }
+    return enabled;
+}
+
+// 单进程写入上限：即使被异常循环调用也不会把日志写爆。
+#define KX_TRACE_MAX_WRITES 200
+
 // component: "typex" / "kayoko-helper" / "kayoko-core"
 // stage:     简短英文步骤名，避免编码问题
 static inline void KXTrace(const char *component, const char *stage) {
-    KXTraceEnsureDir();
+    if (!KXTraceEnabled()) return;
+
+    static int writes = 0;
+    if (writes >= KX_TRACE_MAX_WRITES) return;
+    writes++;
 
     int fd = open(KX_TRACE_LOG, O_WRONLY | O_CREAT | O_APPEND, 0666);
     if (fd < 0) return;

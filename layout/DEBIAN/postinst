@@ -31,13 +31,20 @@ if [ ! -s "$SHARED_PLIST" ] && [ -s "$DOMAIN_PLIST" ]; then
 fi
 
 # ===== keyboardX: 加载期诊断目录 =====
-# boot.log 记录每个组件在加载期走到哪一步；一旦安全模式，读它即可定位崩溃点。
 # 同目录下放置 disable-<组件> 文件可单独关闭该组件，便于二分定位：
 #   disable-all / disable-typex / disable-kayoko-helper / disable-kayoko-core
+#
+# 加载期追踪（boot.log）默认【关闭】：它会在每个被 hook 的进程里写文件并
+# 向 stdout 打印，在 SpringBoard 重启的进程启动风暴中构成可观测的系统级
+# 开销。需要排查加载期问题时手动开启：
+#   touch /var/mobile/Library/KeyboardX/enable-trace
 TRACE_DIR="/var/mobile/Library/KeyboardX"
 mkdir -p "$TRACE_DIR" || true
 chmod 0777 "$TRACE_DIR" || true
-: >> "$TRACE_DIR/boot.log" 2>/dev/null || true
-chmod 0666 "$TRACE_DIR/boot.log" 2>/dev/null || true
+# 仅当追踪开启时重置日志：历史上该文件只追加不截断，会无限增长。
+if [ -f "$TRACE_DIR/enable-trace" ]; then
+    : > "$TRACE_DIR/boot.log" 2>/dev/null || true
+    chmod 0666 "$TRACE_DIR/boot.log" 2>/dev/null || true
+fi
 
 exit 0
