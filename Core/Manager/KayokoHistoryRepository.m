@@ -446,8 +446,8 @@ forItemDictionary:(NSDictionary<NSString *, id> *)dictionary
         if (timebase.denom == 0) mach_timebase_info(&timebase);
         double ms = (double)(mach_absolute_time() - start) * timebase.numer / timebase.denom / 1e6;
         if (ms > 1000.0) {
-            HBLogDebug(@"Kayoko: [MAIN-THREAD BLOCK] history performSync blocked the main thread for %.0f ms",
-                       ms);
+            // 必须用 NSLog：HBLogDebug 在 release 构建里会被编译掉，日志不可见。
+            NSLog(@"Kayoko: [MAIN-THREAD BLOCK] history performSync blocked the main thread for %.0f ms", ms);
         }
         return;
     }
