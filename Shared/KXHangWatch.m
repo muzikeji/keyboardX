@@ -13,6 +13,7 @@
 #import <mach/vm_map.h>
 #import <dlfcn.h>
 #import <pthread.h>
+#import <stdio.h>
 #import <string.h>
 #import <unistd.h>
 #import <fcntl.h>
