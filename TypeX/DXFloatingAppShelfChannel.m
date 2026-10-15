@@ -17,12 +17,23 @@ static BOOL DXShelfWrite(NSString *name, uint64_t word) {
     }
     return notify_set_state(token, word) == NOTIFY_STATUS_OK;
 }
+// 读取用的 notify token 必须缓存。
+// 原实现对每个 8 字节槽位都做一次 notify_register_check 并在读完后 notify_cancel，
+// 也就是每读一个槽位要 3 次 Mach IPC。一个几百字节的快照就是数百次 IPC，而读取
+// 发生在键盘停靠栏的刷新路径上（每个 App、每次键盘弹出），足以把 CPU 拉满。
+// 注册一次并长期持有后，每次读取只剩 1 次 notify_get_state。
+static NSMutableDictionary<NSString *, NSNumber *> *DXShelfReadTokens;
 static BOOL DXShelfRead(NSString *name, uint64_t *word) {
+    if (!DXShelfReadTokens) DXShelfReadTokens = [NSMutableDictionary dictionary];
+    NSNumber *cached = DXShelfReadTokens[name];
     int token = NOTIFY_TOKEN_INVALID;
-    if (notify_register_check(name.UTF8String, &token) != NOTIFY_STATUS_OK) return NO;
-    BOOL read = notify_get_state(token, word) == NOTIFY_STATUS_OK;
-    notify_cancel(token);
-    return read;
+    if (cached) {
+        token = cached.intValue;
+    } else {
+        if (notify_register_check(name.UTF8String, &token) != NOTIFY_STATUS_OK) return NO;
+        DXShelfReadTokens[name] = @(token);
+    }
+    return notify_get_state(token, word) == NOTIFY_STATUS_OK;
 }
 BOOL DXPublishFloatingShelf(NSDictionary *snapshot) {
     if (!NSThread.isMainThread || ![NSProcessInfo.processInfo.processName isEqual:@"SpringBoard"] ||

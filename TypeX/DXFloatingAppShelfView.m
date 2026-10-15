@@ -66,6 +66,25 @@
 - (void)didMoveToWindow { [super didMoveToWindow]; if (self.window) [self refresh]; }
 - (void)refresh {
     if (!NSThread.isMainThread) { dispatch_async(dispatch_get_main_queue(), ^{ [self refresh]; }); return; }
+
+    // 悬浮栏默认关闭。关闭时直接跳过跨进程读取。
+    //
+    // 原因：一次读取要按 8 字节一个槽位走
+    //   notify_register_check + notify_get_state + notify_cancel
+    // 快照越大 Mach IPC 次数越多（数百次），而本视图在每个 App 的键盘停靠栏里
+    // 都会被创建，且 init / 键盘弹出 / App 激活 / didMoveToWindow / 每次快照
+    // 广播都会触发一次 refresh —— 足以把 CPU 拉满并造成界面卡顿。
+    if (!preferencesBool(kFloatingShelfEnabledKey, NO)) {
+        if (self.snapshot) {
+            self.snapshot = nil;
+            for (UIButton *button in self.buttons) [button removeFromSuperview];
+            self.buttons = @[];
+            [self setNeedsLayout];
+            if (self.contentChanged) self.contentChanged();
+        }
+        return;
+    }
+
     NSDictionary *snapshot = DXReadFloatingShelf();
     if (!snapshot || [snapshot isEqual:self.snapshot]) return;
     NSArray *oldIDs = [self.snapshot[@"items"] valueForKey:@"bundleID"];

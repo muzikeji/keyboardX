@@ -1,6 +1,6 @@
 Package: com.muzi.keyboardx
 Name: KeyboardX
-Version: 1.0.5
+Version: 1.0.6
 Architecture: iphoneos-arm
 Description: 键盘增强 + 剪贴板管理 二合一插件。集成 TypeX 的双工具栏/六向手势/滑动面板/桌面手势/自定义动作/JS 引擎/AI 面板，与 Kayoko 的剪切板历史管理/搜索/标签/悬浮粘贴。
 Depends: firmware (>= 15.0), mobilesubstrate, preferenceloader
