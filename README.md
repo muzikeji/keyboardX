@@ -1,6 +1,6 @@
 # keyboardX
 
-**键盘增强 + 剪贴板管理 二合一 iOS 插件**，由 [Kayoko](https://github.com/muzikeji/Kayoko)（剪贴板管理器）与 [TypeX](https://github.com/lindo-zy/TypeX)（键盘增强插件）合并而成。
+**键盘增强 + 剪贴板管理 二合一 iOS 插件**，由 [Kayoko](https://github.com/AlexandraAurora/Kayoko)（剪贴板管理器，作者 Alexandra Aurora Göttlicher）与 [TypeX](https://github.com/lindo-zy/TypeX)（键盘增强插件）合并而成。
 
 ## 功能
 
