@@ -8,6 +8,7 @@
 #import "KayokoHistoryStore.h"
 
 #import <HBLog.h>
+#import <mach/mach_time.h>
 
 static void *kayokoHistoryQueueSpecificKey = &kayokoHistoryQueueSpecificKey;
 static NSInteger const kKayokoCoreHistoryStoreBusyTimeoutMilliseconds = 250;
@@ -76,12 +77,27 @@ static NSInteger const kKayokoCoreHistoryStoreBusyTimeoutMilliseconds = 250;
 }
 
 - (void)closeStore {
-    [self performSync:^{
+    // 关闭只是"释放数据库句柄"，调用方（维护模式）在此之前已置位维护标记，
+    // 因此不需要同步语义。
+    //
+    // 【必须容忍主线程调用】历史队列此刻可能正在做首次建库 / 历史迁移 /
+    // 搜索索引升级，耗时可达数十秒。原实现无条件 dispatch_sync，一旦由
+    // 主线程触发（Darwin 通知回调就是在主线程执行的，例如安装时 postinst
+    // 发来的 prepare-maintenance），就会把主线程整段堵死：
+    //   SpringBoard 主线程被堵 → 看门狗 60s 未收到 ping → 强杀 SpringBoard
+    //   表现为"安装后一段时间系统卡死，随后自行恢复"。
+    // 主线程改为异步执行：立即返回，队列空闲时尽快释放数据库。
+    dispatch_block_t closeBlock = ^{
       [_historyStore closeDatabase];
       _historyStore = nil;
       _didPrepareHistoryStore = NO;
       _prepareHistoryStoreError = nil;
-    }];
+    };
+    if ([NSThread isMainThread]) {
+        [self performAsync:closeBlock];
+    } else {
+        [self performSync:closeBlock];
+    }
 }
 
 #pragma mark - Maintenance
@@ -417,6 +433,22 @@ forItemDictionary:(NSDictionary<NSString *, id> *)dictionary
 
     if ([self isOnHistoryQueue]) {
         block();
+        return;
+    }
+
+    // 主线程上做同步等待是危险的：历史队列可能正在跑首次建库 / 迁移 / 搜索索引
+    // 升级，耗时足以触发系统看门狗把 SpringBoard 强杀。这里加耗时探测，超过
+    // 1 秒即落日志，便于下次直接从设备日志定位是哪个调用堵住了主线程。
+    if ([NSThread isMainThread]) {
+        uint64_t start = mach_absolute_time();
+        dispatch_sync(_historyQueue, block);
+        static mach_timebase_info_data_t timebase;
+        if (timebase.denom == 0) mach_timebase_info(&timebase);
+        double ms = (double)(mach_absolute_time() - start) * timebase.numer / timebase.denom / 1e6;
+        if (ms > 1000.0) {
+            HBLogDebug(@"Kayoko: [MAIN-THREAD BLOCK] history performSync blocked the main thread for %.0f ms",
+                       ms);
+        }
         return;
     }
 
