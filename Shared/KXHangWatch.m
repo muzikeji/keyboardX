@@ -47,9 +47,11 @@ static void KXSampleMainThread(void) {
     mach_msg_type_number_t stateCount = ARM_THREAD_STATE64_COUNT;
     if (thread_get_state(kx_main_thread_port, ARM_THREAD_STATE64,
                          (thread_state_t)&state, &stateCount) == KERN_SUCCESS) {
-        pc = state.__pc;
-        lr = state.__lr;
-        uint64_t fp = state.__fp;
+        // arm64e 启用了指针认证，__pc/__lr/__fp 不能直接读，
+        // 必须用访问器宏（它们会剥掉 PAC 签名位）。
+        pc = arm_thread_state64_get_pc(state);
+        lr = arm_thread_state64_get_lr(state);
+        uint64_t fp = arm_thread_state64_get_fp(state);
         for (int i = 0; i < KX_HANG_MAX_FRAMES && fp != 0; i++) {
             uint64_t frame[2] = {0, 0};
             vm_size_t size = sizeof(frame);
