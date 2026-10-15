@@ -250,14 +250,16 @@ static void kayokoCorePasteTipPreferencesReloadCallback(CFNotificationCenterRef 
                           callback:kayokoCoreClearFavoritesCallback];
     [self addDarwinObserverForName:(__bridge CFStringRef)kKayokoNotificationKeyCoreClearHistory
                           callback:kayokoCoreClearHistoryCallback];
+    // 卡顿采样器必须在业务开关判断之前启动：它只服务于诊断，
+    // 一旦放到 isEnabled 早退之后，未启用剪贴板功能时永远不会运行。
+    KXStartHangWatch();
+
     if (![runtime isEnabled]) {
         return;
     }
 
     [KayokoPasteTipHookInstaller installHooks];
     [KayokoSpringBoardHookInstaller installHooks];
-    // 仅在 enable-trace 存在时启动；用于抓"界面卡死但无崩溃日志"的主线程调用栈。
-    KXStartHangWatch();
     [runtime startLockStateObserver];
 
     [self addDarwinObserverForName:CFSTR("com.apple.pasteboard.notify.changed")

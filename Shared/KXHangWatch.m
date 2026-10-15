@@ -19,7 +19,7 @@
 #import <fcntl.h>
 
 #define KX_HANG_LOG KX_TRACE_DIR "/hang.log"
-#define KX_HANG_PING_TIMEOUT_SEC 3
+#define KX_HANG_PING_TIMEOUT_SEC 2
 #define KX_HANG_MAX_FRAMES 40
 
 // 主线程的 Mach port 必须在主线程上、卡住之前取到，之后由采样线程使用。
@@ -112,7 +112,7 @@ void KXStartHangWatch(void) {
         }
         if (kx_main_thread_port == MACH_PORT_NULL) return;
 
-        KXHangWrite("\n[hangwatch] started\n");
+        KXHangWrite("\n[hangwatch] started (threshold=2s)\n");
 
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
           for (;;) {
