@@ -242,6 +242,19 @@ static BOOL DXReloadPreferencesIfUnavailable(void) {
     DXPrefsManager *manager = [DXPrefsManager sharedInstance];
     if (manager.preferencesAvailable) return NO;
 
+    // 【必须节流】本函数挂在键盘布局热路径上（DXInstallTopAccessoryForResponder
+    // 由 UIKeyboardImpl layoutSubviews / UITextField layoutSubviews 等每次布局
+    // 都会触发）。当 preferencesAvailable 为 NO 时，下面这行 reload 会完整走一遍
+    // 读共享快照文件 + plist 解析 + 偏好迁移。沙盒 App 读不到共享快照时该标志会
+    // 长期为 NO，于是每次键盘布局都做一次文件 I/O —— CPU 直接被拉满、界面卡顿。
+    // 真正的偏好变更会通过 kPrefsChangedIdentifier 通知触发 reload，因此这里
+    // 限制重试频率不会影响恢复能力。
+    static NSTimeInterval kDXReloadRetryInterval = 3.0;
+    static NSTimeInterval lastReloadAttempt = 0;
+    NSTimeInterval now = [NSDate date].timeIntervalSince1970;
+    if (now - lastReloadAttempt < kDXReloadRetryInterval) return NO;
+    lastReloadAttempt = now;
+
     [manager reload];
     if (!manager.preferencesAvailable) return NO;
 
