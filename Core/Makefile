@@ -3,6 +3,7 @@ TWEAK_NAME := KeyboardXCore
 KeyboardXCore_USE_MODULES := 0
 
 KeyboardXCore_FILES += ../Shared/KXProbeKeyboardXCore.m
+KeyboardXCore_FILES += ../Shared/KXHangWatch.m
 KeyboardXCore_FILES += KayokoCore.m
 KeyboardXCore_FILES += KayokoCoreRuntime.m
 KeyboardXCore_FILES += KayokoKeyboardHostResolver.m

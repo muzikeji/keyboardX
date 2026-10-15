@@ -7,6 +7,7 @@
 
 #import "KayokoCore.h"
 #import "KXBootTrace.h"
+#import "KXHangWatch.h"
 #import "KayokoCoreRuntime.h"
 #import "KayokoNotificationKeys.h"
 #import "KayokoSpringBoardHooks.h"
@@ -255,6 +256,8 @@ static void kayokoCorePasteTipPreferencesReloadCallback(CFNotificationCenterRef 
 
     [KayokoPasteTipHookInstaller installHooks];
     [KayokoSpringBoardHookInstaller installHooks];
+    // 仅在 enable-trace 存在时启动；用于抓"界面卡死但无崩溃日志"的主线程调用栈。
+    KXStartHangWatch();
     [runtime startLockStateObserver];
 
     [self addDarwinObserverForName:CFSTR("com.apple.pasteboard.notify.changed")
