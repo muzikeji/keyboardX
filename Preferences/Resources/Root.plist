@@ -46,24 +46,6 @@
 			<key>label</key>
 			<string>键盘增强</string>
 		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>footerText</key>
-			<string>KeyboardX 由 Kayoko（剪贴板管理器，GPL-3.0）与 TypeX（键盘增强，AGPL-3.0）合并而成，整体以 AGPL-3.0 发布。</string>
-			<key>label</key>
-			<string>关于</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>detail</key>
-			<string>KeyboardXAboutListController</string>
-			<key>icon</key>
-			<string>KeyboardXIcon.png</string>
-			<key>label</key>
-			<string>关于 KeyboardX</string>
-		</dict>
 	</array>
 </dict>
 </plist>
